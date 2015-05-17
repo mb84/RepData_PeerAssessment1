@@ -1,3 +1,10 @@
+---
+output:
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+---
+# Reproducible research - Assignment 1 #
 
 
 ## Introduction ##
@@ -35,7 +42,7 @@ adata <- read.csv(file = "activity.csv", header=TRUE, colClasses = c("numeric","
 For this part of the assignment, you can ignore the missing values in the dataset. 
 
 
-** Calculate the total number of steps taken per day **
+**Calculate the total number of steps taken per day**
 
 In order to calculate the total number of steps taken per day, i performed the following steps:
 
@@ -49,11 +56,13 @@ head(stepsumday)
 
 ```
 
-**If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day**
+**If you do not understand the difference between a histogram and a barplot, research the difference between them** 
+
+**Make a histogram of the total number of steps taken each day**
 
 I create the histogram and the barplot of the total number of steps taken each day.
 
-```{r, question1.2, echo=TRUE, fig.width=8}
+```{r, question1.2, echo=TRUE, fig.width=9}
 
 # Setting fig.width = 8 ensure a good representation of the barplot.
 
@@ -84,7 +93,7 @@ The mean total number of steps taken per day and rounded to integer is `r as.int
 
 **Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)**
 
-```{r, question2.1, echo=TRUE}
+```{r, question2.1, echo=TRUE, fig.width=9}
 
 stepsmeaninterval <- aggregate(steps ~ interval, adata, mean, na.action=na.omit)
 plot(y=stepsmeaninterval$steps, x=stepsmeaninterval$interval, main = "Average number of steps taken per interval across all days (rawdata)", xlab = "Intervals", ylab = "N. of steps", type = "l", xaxt = "n")
@@ -129,10 +138,10 @@ table(is.na(adataimputed$steps)) # this is a check to see if NAs are still prese
 
 ```
 
-**Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?**
+**Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment?**
 
 
-```{r, question3.3, fig.width=8}
+```{r, question3.3, fig.width=9}
 
 stepsumday <- aggregate(steps ~ date, adataimputed, sum, na.action=na.fail ) # setting na.action equal to na.fail is another check for the presence of NAs.
 head(stepsumday)
@@ -158,19 +167,20 @@ meandiff <- stepmeantotalday - stepmeantotaldaynew
 The difference of medians between raw and imputed data is:  `r mediandiff`
 The difference of means between raw and imputed data is:  `r meandiff`
 
-Using imputed data the mean and the median of the total steps taken per day is the same as in the raw data.  
-With imputed data thera are more days with high number of steps, but the observations are more due to the filling.  
+**What is the impact of imputing missing data on the estimates of the total daily number of steps?** 
+
+Using imputed data the mean of the total steps taken per day is the same as in the raw data, median is slightly different. With imputed data thera are more days with high number of steps, but the observations are more due to the filling.  
 Imputing data with 5-minute mean interval does not change mean and medians but only the distribution.  
 
 ##Are there differences in activity patterns between weekdays and weekends?##
 
-#For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.*
+**For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data**
 
 In order to highlight diffences between the mean number of steps taken per interval across weekdays or weekends, i create a new column (wd) in the imputed dataset corresponding to weekdays or weekend based on date variable.  
 After this i performed data aggregation computing mean of steps by intervals and days.  
 Finally i've plotted the mean number of steps across 5 min-intervals by the wd categorical variable. 
 
-```{r, question4.1}
+```{r, question4.1, fig.width=9}
 
 weekdays <- c("sabato", "domenica")
 adataimputed$days <- ifelse(is.element(weekdays(as.Date(adataimputed$date)),weekdays), "Weekend", "Weekdays")
@@ -182,7 +192,7 @@ g + geom_line() + facet_grid(days ~ .) +  labs(title = "Activity pattern weekend
 
 ```
 
-As shown in the figure, during weekdays there is a peak in the activity (number of steps) during the morning, whereas in the weekend the distribution of activity is more dispersed across all day.
+As shown in the figure, during weekdays there is a peak in the activity (number of steps) during the morning, whereas in the weekend the distribution of activity is more dispersed across all day. Moreover the activity in the afternoon is higher in the weekends compare to the weekdays.
 
 
 
